@@ -17,7 +17,7 @@ class Company(models.Model):
 class Specialty(models.Model):
     code = models.CharField(primary_key=True, max_length=64)
     name = models.CharField(max_length=100)
-    picture = models.CharField(max_length=64, blank=True)
+    picture = models.URLField(max_length=200)
 
     def __str__(self):
         return self.name

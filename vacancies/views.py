@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.views import View
 
+from .models import Specialty
+
 
 class MainView(View):
     def get(self, request):
-        return render(request, 'vacancies/index.html')
+        specialties = Specialty.objects.all()
+        
+        context = {'specialties': specialties}
+        return render(request, 'vacancies/index.html', context)
 
 
 class VacanciesView(View):
