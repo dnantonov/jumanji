@@ -1,20 +1,22 @@
 from django.shortcuts import render
 from django.views import View
 
-from .models import Specialty
+from .models import Specialty, Company, Vacancy
 
 
 class MainView(View):
     def get(self, request):
         specialties = Specialty.objects.all()
-        
-        context = {'specialties': specialties}
+        companies = Company.objects.all()
+        context = {'specialties': specialties, 'companies': companies}
         return render(request, 'vacancies/index.html', context)
 
 
 class VacanciesView(View):
     def get(self, request):
-        return render(request, 'vacancies/vacancies.html')
+        vacancies = Vacancy.objects.all()
+        context = {'vacancies': vacancies}
+        return render(request, 'vacancies/vacancies.html', context)
 
 
 class CategoryView(View):
