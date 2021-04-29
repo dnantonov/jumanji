@@ -43,7 +43,7 @@
             <p class="card-text"><a href="{% url 'category' specialty.code %}">
             {% for spec in spec_count.items %}
               {% if specialty.code == spec.0 %}
-                {{spec.1}} вакансии
+                {{ spec.1 }} ваканс{{ spec.1|pluralize:"ия,ий" }}
               {% endif %}
             {% endfor %}
             </a></p>
@@ -67,7 +67,13 @@
             <img class="mx-auto d-block mw-100" src="{{ company.logo }}" alt="">
           </a>
           <div class="card-body">
-            <p class="card-text"><a href="#">5 вакансий</a></p>
+            <p class="card-text"><a href="#">
+              {% for comp in comp_count.items %}
+                {% if company.id == comp.0 %}
+                  {{ comp.1 }} ваканс{{ comp.1|pluralize:"ия,ий" }}
+                {% endif %}
+              {% endfor %}
+            </a></p>
           </div>
         </div>
       </div>

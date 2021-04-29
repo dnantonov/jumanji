@@ -9,11 +9,21 @@ class MainView(View):
         specialties = Specialty.objects.all()
         companies = Company.objects.all()
         spec_count = {}
+        comp_count = {}
         # подсчитываем количество вакансий в каждой категории
         for specialty in specialties:
-            spec_count[specialty.code] = Vacancy.objects.filter(specialty=specialty.code).count()     
+            spec_count[specialty.code] = Vacancy.objects.filter(specialty=specialty.code).count()
+        # подсчитываем количество вакансий у каждой компании
+        for company in companies:
+            comp_count[company.id] = Vacancy.objects.filter(company=company.id).count()
+        print(comp_count.items())     
         
-        context = {'specialties': specialties, 'companies': companies, 'spec_count': spec_count}
+        context = {
+            'specialties': specialties, 
+            'companies': companies, 
+            'spec_count': spec_count,
+            'comp_count': comp_count
+        }
         return render(request, 'vacancies/index.html', context)
 
 

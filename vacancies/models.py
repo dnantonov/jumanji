@@ -9,14 +9,22 @@ class Company(models.Model):
     location = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)   
 
+    class Meta:
+        verbose_name = "Компании"
+    
     def __str__(self):
         return self.name
+
+    
 
 
 class Specialty(models.Model):
     code = models.CharField(primary_key=True, max_length=64)
     name = models.CharField(max_length=100)
     picture = models.URLField(max_length=200)
+
+    class Meta:
+        verbose_name = "Специализации"
 
     def __str__(self):
         return self.name
@@ -32,6 +40,9 @@ class Vacancy(models.Model):
     published_at = models.DateTimeField(auto_now_add=True)
     skills = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Вакансии"
 
     def __str__(self):
         return self.title
