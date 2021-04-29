@@ -8,7 +8,12 @@ class MainView(View):
     def get(self, request):
         specialties = Specialty.objects.all()
         companies = Company.objects.all()
-        context = {'specialties': specialties, 'companies': companies}
+        spec_count = {}
+        # подсчитываем количество вакансий в каждой категории
+        for specialty in specialties:
+            spec_count[specialty.code] = Vacancy.objects.filter(specialty=specialty.code).count()     
+        
+        context = {'specialties': specialties, 'companies': companies, 'spec_count': spec_count}
         return render(request, 'vacancies/index.html', context)
 
 

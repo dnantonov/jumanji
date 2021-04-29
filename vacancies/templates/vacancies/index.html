@@ -39,7 +39,14 @@
           <img class="mx-auto d-block" src="{{ specialty.picture }}" width="80" height="80" alt="">
           <div class="card-body">
             <p class="card-text mb-2">{{ specialty.name }}</p>
-            <p class="card-text"><a href="#">5 вакансий</a></p>
+            {{spec_count.specialty.code}}
+            <p class="card-text"><a href="{% url 'category' specialty.code %}">
+            {% for spec in spec_count.items %}
+              {% if specialty.code == spec.0 %}
+                {{spec.1}} вакансии
+              {% endif %}
+            {% endfor %}
+            </a></p>
           </div>
         </div>
       </div>
