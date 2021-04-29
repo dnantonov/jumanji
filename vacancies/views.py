@@ -21,7 +21,10 @@ class VacanciesView(View):
 
 class CategoryView(View):
     def get(self, request, category):
-        return render(request, 'vacancies/vacancies.html')
+        vacancies = Vacancy.objects.filter(specialty=category)
+        category = Specialty.objects.get(code=category).name
+        context = {'vacancies': vacancies, 'category': category}
+        return render(request, 'vacancies/vacancies.html', context)
 
 
 class CompanyView(View):
