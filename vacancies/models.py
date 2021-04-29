@@ -10,7 +10,8 @@ class Company(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name = "Компании"
+        verbose_name = "компания"
+        verbose_name_plural = "компании"
 
     def __str__(self):
         return self.name
@@ -22,7 +23,8 @@ class Specialty(models.Model):
     picture = models.URLField(max_length=200)
 
     class Meta:
-        verbose_name = "Специализации"
+        verbose_name = "специализация"
+        verbose_name_plural = "специализации"
 
     def __str__(self):
         return self.name
@@ -44,7 +46,8 @@ class Vacancy(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        verbose_name = "Вакансии"
+        verbose_name = "вакансия"
+        verbose_name_plural = "вакансии"
 
     def __str__(self):
         return self.title
