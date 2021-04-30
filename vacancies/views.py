@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.views import View
 from django.db.models import Count
+from django.views.generic import CreateView
+
 
 from .models import Specialty, Company, Vacancy
 
 
 class MainView(View):
+    # CBV для главной
     def get(self, request):
         specialties = Specialty.objects.all()
         companies = Company.objects.all()
