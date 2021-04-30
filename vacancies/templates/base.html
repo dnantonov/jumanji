@@ -23,7 +23,12 @@
           </ul>
           <ul class="navbar-nav col-2 justify-content-end">
             <li class="nav-item active">
-              <a href="#" class="nav-link font-weight-bold">Вход</a>
+              {% if user.is_authenticated %}
+                <span>Привет, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="nav-link">Выход</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="nav-link font-weight-bold">Вход</a>
+              {% endif %}
             </li>
           </ul>
         </div>

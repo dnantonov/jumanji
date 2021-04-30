@@ -10,15 +10,12 @@ from .forms import CreateUserForm
 
 
 
-class LoginView(LoginView):
+class MyLoginView(LoginView):
+    redirect_authenticated_user = True
     template_name = 'accounts/login.html'
 
 
-class LogoutView(View):
-    pass
-
-
-class RegisterView(CreateView):
+class MyRegisterView(CreateView):
     form_class = CreateUserForm
     template_name = 'accounts/register.html'
 
@@ -30,7 +27,4 @@ class RegisterView(CreateView):
                 user = form.save()
 
                 return HttpResponseRedirect(LOGIN_REDIRECT_URL)
-
-        context = {'form': form}
-        return render(request, template_name, context)
 

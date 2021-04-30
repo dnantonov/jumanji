@@ -4,27 +4,35 @@
   <main class="container">
     <div class="row">
       <div class="col-8 col-lg-4 offset-2 offset-lg-4">
-        <form class="form-signin pt-5" enctype="multipart/form-data">
+        <form method="post" class="form-signin pt-5" action="">
+          {% csrf_token %}
           <div class="text-center mt-5 b-1">
 
             <h1 class="h3 mb-3 font-weight-normal">Джуманджи</h1>
             <p class="h5 font-weight-light">Войдите, чтобы управлять</p>
           </div>
-          <div class="mt-5 form-label-group">
-            <p class="text-muted">Логин</p>
-            <input type="text" id="inputLogin" class="form-control" required autofocus>
-            <label for="inputLogin"></label>
-          </div>
+
           <div class="form-label-group">
-            <p class="text-muted"> Пароль</p>
-            <input type="password" id="inputPassword" class="form-control" required>
-            <label for="inputPassword"></label>
+            <p class="text-muted">{{ form.username.label }}</p>
+            <input type="text" id="id_{{ form.username.name }}" class="form-control" required autofocus name="{{ form.username.name }}">
+            <label for="id_{{ form.username.name }}"></label>
           </div>
+
+        
+
+          <div class="form-label-group">
+            <p class="text-muted">{{ form.password.label }}</p>
+            <input type="password" id="id_{{ form.password.label }}" class="form-control" required name="{{ form.password.name }}">
+            <label for="id_{{ form.password.name }}"></label>
+          </div>
+          <!-- {{ form.as_table}} -->
+          {{ form.errors }}
+
           <div class="checkbox mb-3"></div>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Войти</button>
         </form>
 
-        <div class="mt-4 text-center"><p>Нет аккаунта? <a href="/register">Зарегистрируйтесь!</a></p></div>
+        <div class="mt-4 text-center"><p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь!</a></p></div>
 
       </div>
     </div>
