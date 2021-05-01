@@ -82,9 +82,8 @@ class SendApplicationView(View):
 
 
 class MyCompanyView(View):
-    # CBS для отображения страницы компании
+    # CBS для отображения страницы редактирования компании
     def get(self, request):
-        
         try:
             company = Company.objects.get(owner=request.user)
             return render(request, 'vacancies/company-edit.html')
@@ -93,10 +92,10 @@ class MyCompanyView(View):
 
 
 class MyCompanyEditView(View):
+    # CBS для создания новой компании
     def get(self, request):
-            print('error')
             Company.objects.create(
-                name="Example Name",
+                name="Название вашей компании",
                 employee_count=0,
                 location="Челябинск",
                 description="Описание компании",
