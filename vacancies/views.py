@@ -5,6 +5,8 @@ from django.views.generic import CreateView
 
 from django.http import HttpResponse, HttpResponseRedirect
 
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from .models import Specialty, Company, Vacancy
 from .forms import ApplicationForm
@@ -82,7 +84,24 @@ class SendApplicationView(View):
 class MyCompanyView(View):
     # CBS для отображения страницы компании
     def get(self, request):
-        return render(request, 'vacancies/company-create.html')
+        
+        try:
+            company = Company.objects.get(owner=request.user)
+            return render(request, 'vacancies/company-edit.html')
+        except ObjectDoesNotExist:
+            return render(request, 'vacancies/company-create.html')
+
+
+class MyCompanyEditView(View):
+    def get(self, request):
+            print('error')
+            Company.objects.create(
+                name="Example Name",
+                employee_count=0,
+                location="Челябинск",
+                description="Описание компании",
+                owner=request.user)
+            return redirect('mycompany')
 
 
 class MyCompanyVacanciesView(View):

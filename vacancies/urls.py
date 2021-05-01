@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from .views import (MainView, VacanciesView, CategoryView,
                     CompanyView, VacancyView, SendApplicationView,
                     MyCompanyView, MyCompanyVacanciesView,
-                    MyCompanyVacancyView)
+                    MyCompanyVacancyView, MyCompanyEditView)
 
 
 
@@ -22,6 +22,8 @@ urlpatterns = [
         SendApplicationView.as_view(), name="send-application"),
     path('mycompany/',
         MyCompanyView.as_view(), name="mycompany"),
+    path('mycompany/edit/',
+        MyCompanyEditView.as_view(), name="mycompany-edit"),
     path('mycompany/vacancies/',
         MyCompanyVacanciesView.as_view(), name="mycompany-vacancies"),
     path('mycompany/vacancies/<int:id>/',

@@ -9,7 +9,7 @@ from jumanji.settings import MEDIA_COMPANY_IMAGE_DIR, \
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    logo = models.ImageField(upload_to=MEDIA_COMPANY_IMAGE_DIR)
+    logo = models.ImageField(upload_to=MEDIA_COMPANY_IMAGE_DIR, blank=True, default='media/company_images/default.jpg')
     employee_count = models.IntegerField()
     location = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)

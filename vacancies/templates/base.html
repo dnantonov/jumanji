@@ -31,18 +31,19 @@
             <li class="nav-item active">
 
               {% if user.is_authenticated %}
-                <div class="dropdown show">
-                  <a class="btn dropdown-toggle dropdow-header font-weight-bold" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ user.first_name }} {{ user.last_name }}
-                  </a>
-                
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#">Профиль</a>
-                    <a class="dropdown-item" href="#">Резюме</a>
-                    <a class="dropdown-item" href="#">Компания</a>
-                    <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
-                  </div>
+
+              <div class="btn-group">
+                <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ user.first_name }} {{ user.last_name }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-3">
+                  <a href="#" class="dropdown-item py-2">Профиль</a>
+                  <a href="#" class="dropdown-item py-2">Резюме</a>
+                  <a href="#" class="dropdown-item py-2">Компания</a>
+                  <a href="{% url 'logout' %}" class="dropdown-item py-2">Выйти</a>
                 </div>
+              </div>
+                
               {% else %}
                 <a href="{% url 'login' %}" class="nav-link font-weight-bold">Вход</a>
               {% endif %}
