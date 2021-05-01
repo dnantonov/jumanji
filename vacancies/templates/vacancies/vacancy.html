@@ -24,24 +24,29 @@
         </div>
         <form method="post" action="" class="card mt-4 mb-3" enctype="multipart/form-data">
           {% csrf_token %}
-          {{ form.as_table }}
-          <input type="submit" class="btn btn-primary mt-4 mb-2" value="Записаться на пробный урок">
-          <!-- <div class="card-body mx-3">
+
+          <div class="card-body mx-3">
             <p class="h5 mt-3 font-weight-normal">Отозваться на вакансию</p>
+            
             <div class="form-group">
-              <label class="mb-1 mt-2" for="userName">Вас зовут</label>
-              <input class="form-control" type="text" placeholder="" id="userName">
+              <label class="mb-1 mt-2" for="id_{{ form.written_username.name }}">Вас зовут</label>
+              <input class="form-control" type="text" name="{{ form.written_username.name }}" id="id_{{ form.written_username.name }}">
             </div>
+
             <div class="form-group">
-              <label class="mb-1" for="userPhone">Ваш телефон</label>
-              <input class="form-control" type="tel" placeholder="" id="userPhone">
+              <label class="mb-1" for="id_{{ form.written_phone.name }}">Ваш телефон</label>
+              <input class="form-control" type="tel" name="{{ form.written_phone.name }}" id="id_{{ form.written_phone.name }}">
             </div>
+            
             <div class="form-group">
-              <label class="mb-1" for="userMsg" >Сопроводительное письмо</label>
-              <textarea class="form-control" rows="8" id="userMsg"></textarea>
+              <label class="mb-1" for="id_{{ form.written_cover_letter.name }}" >Сопроводительное письмо</label>
+              <textarea class="form-control" rows="8" name="{{ form.written_cover_letter.name }}" id="id_{{ form.written_cover_letter.name }}"></textarea>
             </div>
+            {{ form.errors }}
+
             <input type="submit" class="btn btn-primary mt-4 mb-2" value="Записаться на пробный урок">
-          </div> -->
+          
+          </div>
         </form>
       </section>
     </div>

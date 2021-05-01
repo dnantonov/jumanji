@@ -62,7 +62,7 @@ class Vacancy(models.Model):
 class Application(models.Model):
     id = models.AutoField(primary_key=True)
     written_username = models.CharField(max_length=200)
-    writter_phone = models.CharField(max_length=200)
+    written_phone = models.CharField(max_length=200)
     written_cover_letter = models.TextField(blank=True, null=True)
     vacancy = models.ForeignKey(Vacancy, 
                                 on_delete=models.CASCADE, 

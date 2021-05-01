@@ -7,5 +7,5 @@ class ApplicationForm(ModelForm):
     class Meta:
         model = Application
         # fields = '__all__'
-        fields = ['written_username', 'writter_phone', 'written_cover_letter']
+        fields = ['written_username', 'written_phone', 'written_cover_letter']
 
