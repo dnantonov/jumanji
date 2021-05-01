@@ -20,12 +20,29 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'vacancies' %}">Вакансии</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'vacancies' %}">Компании</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'vacancies' %}">О проекте</a>
+            </li>
           </ul>
           <ul class="navbar-nav col-2 justify-content-end">
             <li class="nav-item active">
+
               {% if user.is_authenticated %}
-                <span>Привет, {{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="nav-link">Выход</a>
+                <div class="dropdown show">
+                  <a class="btn dropdown-toggle dropdow-header font-weight-bold" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.first_name }} {{ user.last_name }}
+                  </a>
+                
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#">Профиль</a>
+                    <a class="dropdown-item" href="#">Резюме</a>
+                    <a class="dropdown-item" href="#">Компания</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+                  </div>
+                </div>
               {% else %}
                 <a href="{% url 'login' %}" class="nav-link font-weight-bold">Вход</a>
               {% endif %}

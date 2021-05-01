@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.db.models import Count
 from django.views.generic import CreateView
 
+from django.http import HttpResponse, HttpResponseRedirect
+
 
 from .models import Specialty, Company, Vacancy
+from .forms import ApplicationForm
+
 
 
 class MainView(View):
@@ -53,6 +57,41 @@ class CompanyView(View):
 class VacancyView(View):
     # CBS для страницы вакансии
     def get(self, request, id):
+        form = ApplicationForm
         vacancy = Vacancy.objects.get(id=id)
-        context = {'vacancy': vacancy}
+        context = {'vacancy': vacancy, 'form': form}
         return render(request, 'vacancies/vacancy.html', context)
+    def post(self, request, id):
+        success_url = f'/vacancies/{id}/send'
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.vacancy = Vacancy.objects.get(id=id)
+            application.save()
+            return HttpResponseRedirect(success_url)
+
+
+class SendApplicationView(View):
+    # CBS для отправки заявки
+    def get(self, request, id):
+        context = {'id': id}
+        return render(request, 'vacancies/sent.html', context)
+
+
+class MyCompanyView(View):
+    # CBS для отображения страницы компании
+    def get(self, request):
+        return render(request, 'vacancies/company-create.html')
+
+
+class MyCompanyVacanciesView(View):
+    # CBS для отображения вакансий компании
+    def get(self, request):
+        return render(request, 'vacancies/vacancy-list.html')
+
+
+class MyCompanyVacancyView(View):
+    # CBS для отображения вакансии компании
+    def get(self, request, id):
+        return render(request, 'vacancies/vacancy-edit.html')
