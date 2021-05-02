@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}Вакансии компании | Джуманджи{% endblock %}
 
 {% block content %}
@@ -20,65 +21,82 @@
     <div class="col-12 col-lg-8">
       <div class="card">
         <div class="card-body px-4 pb-4 tab-content">
+
           <!-- Tab -->
           <section>
-            <h2 class="h4 pt-2 pb-3">Backend Middle/Senior</h2>
-            <p class="alert alert-info" role="alert">Вакансия обновлена</p>
-            <form action="/echo" enctype="multipart/form-data">
+            <h2 class="h4 pt-2 pb-3">{{ vacancy.title }}</h2>
+            {% if messages %}
+              {% for message in messages %}
+              <p class="alert alert-info" role="alert">
+                {{ message }}
+              </p>
+              {% endfor %}
+            {% endif %}
+
+
+            <form method="post" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+              
+
               <div class="row">
+                
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="vacancyTitle">Название вакансии</label>
-                    <input class="form-control" type="text" value="Staffing Smarter" id="vacancyTitle">
+
+                    <label class="mb-2 text-dark" for="id_{{ form.title.name }}">Название вакансии</label>
+                    <input class="form-control" type="text" value="{{ vacancy.title }}" name="{{ form.title.name }}" id="id_{{ form.title.name  }}">
+                  
                   </div>
                 </div>
+
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="userSpecialization">Специализация</label>
-                    <select class="custom-select mr-sm-2" id="userSpecialization">
-                      <option selected>Backend разработка</option>
-                      <option value="1">Frontend разработка</option>
-                      <option value="2">Project manager</option>
+                    <label class="mb-2 text-dark" for="id_{{ form.specialty.name }}">Специализация</label>
+                    <select class="custom-select mr-sm-2" name="{{ form.specialty.name }}" id="id_{{ form.specialty.name }}">
+                      {% for specialty in specialties %}
+                      <option value="{{ specialty.code }}" {% if vacancy.specialty == specialty %}selected{% endif %}>{{specialty.name}}</option>
+                      {% endfor %}
                     </select>
                   </div>
                 </div>
               </div>
+
               <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="vacancySalaryMin">Зарплата от</label>
-                    <input class="form-control" type="text" value="90 000" id="vacancySalaryMin">
+                    <label class="mb-2 text-dark" for="id_{{ form.salary_from.name }}">Зарплата от</label>
+                    <input class="form-control" type="text" value="{{ vacancy.salary_from }}" name="{{ form.salary_from.name }}" id="id_{{ form.salary_from.name }}">
                   </div>
                 </div>
+
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2" for="vacancySalaryMax">Зарплата до</label>
-                    <input class="form-control" type="text" value="90 000" id="vacancySalaryMax">
+                    <label class="mb-2" for="id_{{ form.salary_to.name }}">Зарплата до</label>
+                    <input class="form-control" type="text" value="{{ vacancy.salary_to }}" name="{{ form.salary_to.name }}" id="id_{{ form.salary_to.name }}">
                   </div>
                 </div>
               </div>
-              <div class="form-group pb-2">
-                <label class="mb-2 text-dark" for="vacancySkills">Требуемые навыки</label>
-                <textarea class="form-control" rows="3" id="vacancySkills" style="color:#000;">Бэкенд • Средний (Middle) • PHP • PostgreSQL • MySQL • Node.js • Laravel • Symfony • Yii framework • Sails.js • Rabbitmq • Kafka</textarea>
-              </div>
-              <div class="form-group pb-2">
-                <label class="mb-2 text-dark" for="vacancyDescription">Описание вакансии</label>
-                <textarea class="form-control" rows="13" id="vacancyDescription" style="color:#000;">Финтех компания входит в международную группу  и занимается развитием факторингового бизнеса. В связи с расширением штата, мы хотим усилить нашу команду Backend-разработчиком, для работы над улучшением продуктов компании.
 
-Мы предлагаем:
-Оформление по ТК РФ
-ДМС со стоматологией
-Достойную зарплату, уровень которой можно обсудить по телефону с рекрутером
-Гибкое начало дня, отдельные дни удаленной работы обсуждаются
-Современный офис
-Демократичную корпоративную культуру
-Работу в команде по Scrum
-                </textarea>
+              <div class="form-group pb-2">
+                <label class="mb-2 text-dark" for="id_{{ form.skills.name }}">Требуемые навыки</label>
+                <textarea class="form-control" rows="3" name="{{ form.skills.name }}" id="id_{{ form.skills.name }}" 
+                  style="color:#000;">{% if vacancy.skills %}{{ vacancy.skills }}{% endif %}</textarea>
               </div>
+
+              <div class="form-group pb-2">
+                <label class="mb-2 text-dark" for="id_{{ form.description.name }}">Описание вакансии</label>
+                <textarea class="form-control" rows="13" name="{{ vacancy.description.name }}" id="id_{{ form.description.name }}" 
+                  style="color:#000;">{% if vacancy.description %}{{ vacancy.description }}{% endif %}</textarea>
+              </div>
+              {{ form.errors }}
+
               <div class="form-group">
                 <input type="submit" class="btn btn-info" value="Сохранить">
               </div>
             </form>
+
+            
+
             <!-- END Vacancy info -->
             <!-- Applications -->
             <h2 class="h4 pt-2 pb-3">Отклики - 2</h2>
@@ -110,3 +128,42 @@
 </main>
 
 {% endblock %}
+
+
+
+<!-- <tr>
+  <th>
+    <label for="id_title">Название вакансии:</label>
+  </th>
+  <td>
+    <input type="text" name="title" value="Django Course" maxlength="200" required id="id_title">
+  </td>
+</tr>
+<tr>
+  <th>
+    <label for="id_specialty">Специализация:</label>
+  </th>
+  <td>
+    <ul class="errorlist">
+      <li>Обязательное поле.</li>
+    </ul>
+    <select name="specialty" required id="id_specialty">
+  <option value="" selected>---------</option>
+
+  <option value="frontend">Фронтенд</option>
+
+  <option value="backend">Бэкенд</option>
+
+  <option value="gamedev">Геймдев</option>
+
+  <option value="devops">Девопс</option>
+
+  <option value="design">Дизайн</option>
+
+  <option value="products">Продукты</option>
+
+  <option value="management">Менеджмент</option>
+
+  <option value="testing">Тестирование</option>
+
+</select></td></tr> -->

@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 from .models import Specialty, Company, Vacancy
-from .forms import ApplicationForm, CompanyForm
+from .forms import ApplicationForm, CompanyForm, VacancyForm
 
 
 
@@ -92,16 +92,15 @@ class MyCompanyView(View):
         except ObjectDoesNotExist:
             return render(request, 'vacancies/company-create.html')
     def post(self, request):
-
         instance = Company.objects.get(owner=request.user)
         form = CompanyForm(request.POST or None, instance=instance)
-        
         if form.is_valid():
-            messages.success(request, 'Информация о компании обновлена')
             company = form.save(commit=False)
             company.owner = request.user
             company.save()
+            messages.success(request, 'Информация о компании обновлена')
             return HttpResponseRedirect(self.request.path_info)
+        return render(request, 'vacancies/company-edit.html')
 
 
 class MyCompanyEditView(View):
@@ -121,11 +120,38 @@ class MyCompanyVacanciesView(View):
     def get(self, request):
         company = Company.objects.get(owner=request.user)
         vacancies = Vacancy.objects.filter(company=company)
-        context = {'vacancies': vacancies}
+        all_vac = Vacancy.objects.all().count()
+        num_of_vacancies = Vacancy.objects.all().count()
+        context = {'vacancies': vacancies, 'all_vac': all_vac}
         return render(request, 'vacancies/vacancy-list.html', context)
 
 
 class MyCompanyVacancyView(View):
     # CBS для отображения вакансии компании
     def get(self, request, id):
+        
+        form = VacancyForm
+        company = Company.objects.get(owner=request.user)
+        specialty = Specialty.objects.get(code="backend")
+        specialties = Specialty.objects.all()
+        try:
+            vacancy = Vacancy.objects.get(id=id)
+        except ObjectDoesNotExist:
+            vacancy = Vacancy.objects.create(
+                id=id,
+                title="Название вакансии",
+                specialty=specialty,
+                company=company,
+            )
+        context = {'vacancy': vacancy, 'form': form, 'specialties': specialties}
+        return render(request, 'vacancies/vacancy-edit.html', context)
+    def post(self, request, id):
+        instance = Vacancy.objects.get(id=id)
+        form = VacancyForm(request.POST or None, instance=instance)
+        if form.is_valid():
+            vacancy = form.save(commit=False)
+            vacancy.company = Company.objects.get(owner=request.user)
+            vacancy.save()
+            messages.success(request, 'Вакансия обновлена')
+            return HttpResponseRedirect(self.request.path_info)
         return render(request, 'vacancies/vacancy-edit.html')

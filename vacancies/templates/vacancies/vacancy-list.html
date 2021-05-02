@@ -30,7 +30,7 @@
               <div class="card-body px-4">
                 <div class="row align-items-center">
                   <div class="col-6 col-lg-8">
-                    <a href="#" class="mb-1">{{ vacancy.title }}</a>
+                    <a href="{% url 'vacancy' vacancy.id %}" class="mb-1">{{ vacancy.title }}</a>
                     <p class="mb-1">
                       <span class="mr-4">{{ vacancy.salary_from }}</span><a href="#" class="text-info">
                         {{ vacancy.applications.all|length }}
@@ -38,7 +38,7 @@
                     </p>
                   </div>
                   <div class="col-6 col-lg-4 text-right">
-                    <a href="#" class="btn btn-outline-info">Изменить</a>
+                    <a href="{% url 'mycompany-vacancy' vacancy.id %}" class="btn btn-outline-info">Изменить</a>
                   </div>
                 </div>
               </div>
@@ -46,9 +46,9 @@
             <!-- END vacancy state 1 -->
             {% endfor %}
 
-            {% with vac=vacancies.all|length %}
-              <a href="{% url 'mycompany-vacancy' vac|add:"1"  %}" class="mt-4 btn btn-info mb-2">Добавить вакансию</a>
-            {% endwith %}
+            <!-- {% with vac=vacancies.all|length %} -->
+              <a href="{% url 'mycompany-vacancy' all_vac|add:"1"  %}" class="mt-4 btn btn-info mb-2">Добавить вакансию</a>
+            <!-- {% endwith %} -->
 
           </section>
         </div>
