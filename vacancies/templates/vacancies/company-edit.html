@@ -12,8 +12,8 @@
       <aside class="pt-3 pb-4 px-4 mb-5 card">
         <h1 class="h4 pt-2 pb-2">Моя компания</h1>
         <div class="nav flex-column nav-pills">
-          <a class="nav-link active" href="#">1. Информация о&nbsp;компании</a>
-          <a class="nav-link" href="#">2. Вакансии</a>
+          <a class="nav-link active" href="{% url 'mycompany' %}">1. Информация о&nbsp;компании</a>
+          <a class="nav-link" href="{% url 'mycompany-vacancies' %}">2. Вакансии</a>
         </div>
       </aside>
     </div>
@@ -23,58 +23,71 @@
           <!-- Tab -->
           <section class="tab-pane fade show active">
             <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
-            <p class="alert alert-info" role="alert">
-              Информация о компании обновлена
-            </p>
-            <form action="/echo" enctype="multipart/form-data">
+            {% if messages %}
+              {% for message in messages %}
+              <p class="alert alert-info" role="alert">
+                {{ message }}
+              </p>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+
               <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="companyName">Название компании</label>
-                    <input class="form-control" type="text" value="Staffing Smarter" id="companyName">
+                    <label class="mb-4 text-dark" for="id_{{ form.name.name }}">Название компании</label>
+                    <input class="form-control" name="{{ form.name.name }}" type="text" value="{{ company.name }}" id="id_{{ form.name.name }}">
                   </div>
                 </div>
+
                 <div class="col-12 col-md-6">
                   <div class="form-group">
-                    <label class="mb-2 text-dark" for="companyLogo">Логотип</label>
+                    <label class="mb-2 text-dark" for="id_{{ form.logo.name }}">Логотип</label>
                     <div class="row align-items-center">
                       <div class="col-6">
-                        <img src="https://place-hold.it/120x40" alt="" style="max-width: 120px;height: auto;">
+                        <img src="{{ company.logo.url }}" alt="" style="max-width: 120px;height: auto;">
                       </div>
                       <div class="col-6" style="position: relative;">
                         <div class="input-group-prepend" style="position: absolute; top: 0;right: 15px;">
                           <span class="btn btn-info px-4">Загрузить</span>
                         </div>
                         <div class="custom-file" style="">
-                          <input type="file" class="custom-file-input" id="inputGroupFile01">
+                          <input type="file"  name="{{ form.logo.name }}" class="custom-file-input" id="id_{{ form.logo.name }}">
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
               <div class="row">
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="companyTeam">Количество человек в компании</label>
-                    <input class="form-control" type="text" value="10-15" id="companyTeam">
+                    <label class="mb-2 text-dark" for="id_{{ form.employee_count.name }}">Количество человек в компании</label>
+                    <input class="form-control" type="text" name="{{ form.employee_count.name }}" value="{{ company.employee_count }}" id="id_{{ form.employee_count.name }}">
                   </div>
                 </div>
+
                 <div class="col-12 col-md-6">
                   <div class="form-group pb-2">
-                    <label class="mb-2 text-dark" for="companyLocation">География</label>
-                    <input class="form-control" type="text" value="Рязань" id="companyLocation">
+                    <label class="mb-2 text-dark" for="id_{{ form.location.name }}">География</label>
+                    <input class="form-control" type="text" name="{{ form.location.name }}" value="{{ company.location }}" id="id_{{ form.location.name }}">
                   </div>
                 </div>
               </div>
+
               <div class="form-group pb-2">
-                <label class="mb-2 text-dark" for="companyInfo">Информация о&nbsp;компании</label>
-                <textarea class="form-control" rows="4" id="companyInfo" style="color:#000;">Для тех, кто желает работать в&nbsp;комфортном офисе,&nbsp;&mdash; у&nbsp;нас их&nbsp;целых три. Исторически так сложилось, что руководство и&nbsp;менеджерский состав располагается в&nbsp;Москве (обусловлено близостью заказчиков), центр разработки&nbsp;&mdash; в&nbsp;Ульяновске, в&nbsp;т.&nbsp;ч. школа молодых разработчиков и&nbsp;QA-центр&nbsp;&mdash; в&nbsp;Казани.</textarea>
+                <label class="mb-2 text-dark" for="id_{{ form.description.name }}">Информация о&nbsp;компании</label>
+                <textarea class="form-control" rows="4" name="{{ form.description.name }}"  id="id_{{ form.description.name }}" style="color:#000;">{{ company.description }}</textarea>
               </div>
+              {{ form.errors }}
               <div class="form-group">
                 <input type="submit" class="btn btn-info" value="Сохранить">
               </div>
             </form>
+
           </section>
           <!-- END Tab -->
         </div>
