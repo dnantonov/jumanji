@@ -1,16 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.db.models import Count
-from django.views.generic import CreateView
 from django.contrib import messages
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import (HttpResponseRedirect,
+                         HttpResponseNotFound,
+                         HttpResponseServerError)
 from django.core.exceptions import ObjectDoesNotExist
 
-
-from .models import Specialty, Company, Vacancy
+from .models import Specialty, Company, Vacancy, Application
 from .forms import ApplicationForm, CompanyForm, VacancyForm
-
 
 
 class MainView(View):
@@ -18,7 +16,6 @@ class MainView(View):
     def get(self, request):
         specialties = Specialty.objects.all()
         companies = Company.objects.all()
-        
         context = {
             'specialties': specialties,
             'companies': companies,
@@ -48,7 +45,7 @@ class CompanyView(View):
     def get(self, request, id):
         company = Company.objects.get(id=id)
         vacancies = Vacancy.objects.filter(company=id)
-        
+
         context = {
             'company': company,
             'vacancies': vacancies,
@@ -63,6 +60,7 @@ class VacancyView(View):
         vacancy = Vacancy.objects.get(id=id)
         context = {'vacancy': vacancy, 'form': form}
         return render(request, 'vacancies/vacancy.html', context)
+
     def post(self, request, id):
         success_url = f'/vacancies/{id}/send'
         form = ApplicationForm(request.POST)
@@ -91,6 +89,7 @@ class MyCompanyView(View):
             return render(request, 'vacancies/company-edit.html', context)
         except ObjectDoesNotExist:
             return render(request, 'vacancies/company-create.html')
+
     def post(self, request):
         instance = Company.objects.get(owner=request.user)
         form = CompanyForm(request.POST or None, instance=instance)
@@ -106,45 +105,53 @@ class MyCompanyView(View):
 class MyCompanyEditView(View):
     # CBS для создания новой компании
     def get(self, request):
-            Company.objects.create(
-                name="Название вашей компании",
-                employee_count=0,
-                location="Челябинск",
-                description="Описание компании",
-                owner=request.user)
-            return redirect('mycompany')
+        Company.objects.create(
+            name="Название вашей компании",
+            employee_count=0,
+            location="Челябинск",
+            description="Описание компании",
+            owner=request.user)
+        return redirect('mycompany')
 
 
 class MyCompanyVacanciesView(View):
-    # CBS для отображения вакансий компании
+    # CBS для отображения всех вакансий компании
     def get(self, request):
         company = Company.objects.get(owner=request.user)
         vacancies = Vacancy.objects.filter(company=company)
         all_vac = Vacancy.objects.all().count()
-        num_of_vacancies = Vacancy.objects.all().count()
         context = {'vacancies': vacancies, 'all_vac': all_vac}
         return render(request, 'vacancies/vacancy-list.html', context)
 
 
 class MyCompanyVacancyView(View):
-    # CBS для отображения вакансии компании
+    # CBS для отображения конкретной вакансии компании
     def get(self, request, id):
-        
         form = VacancyForm
         company = Company.objects.get(owner=request.user)
         specialty = Specialty.objects.get(code="backend")
         specialties = Specialty.objects.all()
         try:
             vacancy = Vacancy.objects.get(id=id)
+            applications = Application.objects.filter(vacancy=vacancy)
+            print(applications)
         except ObjectDoesNotExist:
             vacancy = Vacancy.objects.create(
                 id=id,
                 title="Название вакансии",
+                salary_from=10000,
+                salary_to=20000,
                 specialty=specialty,
                 company=company,
             )
-        context = {'vacancy': vacancy, 'form': form, 'specialties': specialties}
+        context = {
+            'vacancy': vacancy,
+            'form': form,
+            'specialties': specialties,
+            'applications': applications
+        }
         return render(request, 'vacancies/vacancy-edit.html', context)
+
     def post(self, request, id):
         instance = Vacancy.objects.get(id=id)
         form = VacancyForm(request.POST or None, instance=instance)
@@ -155,3 +162,11 @@ class MyCompanyVacancyView(View):
             messages.success(request, 'Вакансия обновлена')
             return HttpResponseRedirect(self.request.path_info)
         return render(request, 'vacancies/vacancy-edit.html')
+
+
+def custom_handler404(request, exception):
+    return HttpResponseNotFound('Страница не найдена!')
+
+
+def custom_handler500(request):
+    return HttpResponseServerError('Сервер не доступен!')
