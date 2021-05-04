@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import Application, Company, Vacancy
+from .models import Application, Company, Vacancy, Resume
 
 
 class ApplicationForm(ModelForm):
@@ -26,3 +26,10 @@ class VacancyForm(ModelForm):
                   'salary_from': 'Зарплата от',
                   'salary_to': 'Зарплата до',
                   }
+
+
+class ResumeForm(ModelForm):
+    class Meta:
+        model = Resume
+        exclude = ['user']
+

@@ -9,7 +9,7 @@ from django.http import (HttpResponseNotFound,
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Specialty, Company, Vacancy, Application, Resume
-from .forms import ApplicationForm, CompanyForm, VacancyForm
+from .forms import ApplicationForm, CompanyForm, VacancyForm, ResumeForm
 
 
 class MainView(View):
@@ -163,12 +163,8 @@ class MyCompanyVacancyView(View):
         return render(request, 'vacancies/vacancy-edit.html')
 
 
-class MyResumeView(View):
-    def get(self, request):
-        return render(request, 'vacancies/myresume.html')
-
-
 class SearchView(ListView):
+    # CBS для выдачи поисковых запросов
     def get(self, request):
         query = self.request.GET.get('q')
         object_list = Vacancy.objects.filter(
@@ -176,6 +172,41 @@ class SearchView(ListView):
         )
         context = {'object_list': object_list, 'query': query}
         return render(request, 'vacancies/search.html', context)
+
+
+class MyResumeView(View):
+    # CBS для отображения страницы редактирования резюме
+    def get(self, request):
+        form = ResumeForm
+        try:
+            resume = Resume.objects.get(user=request.user)
+            context = {'resume': resume, 'form': form}
+            return render(request, 'vacancies/resume-edit.html', context)
+        except ObjectDoesNotExist:
+            return render(request, 'vacancies/resume-create.html')
+
+        def post(self, request):
+            instance = Resume.objects.get(user=request.user)
+            form = ResumeForm(request.POST or None, instance=instance)
+            if form.is_valid():
+                resume = form.save(commit=False)
+                resume.user = request.user
+                resume.save()
+                messages.success(request, 'Ваше резюме обновлено!')
+                return redirect(self.request.path_info)
+            return render(request, 'vacancies/resume-edit.html')    
+
+
+
+class MyResumeCreateView(View):
+    # CBS для создания нового резюме
+    def get(self, request):
+        Resume.objects.create(
+                user=request.user,
+                name="Имя",
+                surname="Фамилия"
+        )
+        return redirect('myresume')
 
 
 def custom_handler404(request, exception):

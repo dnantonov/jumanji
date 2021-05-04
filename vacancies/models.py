@@ -88,9 +88,9 @@ class Resume(models.Model):
     id = models.AutoField(primary_key=True)
     
     STATUS = (
-        ('Не ищу работу', 'Не ищу работу'),
-        ('Рассматриваю предложения', 'Рассматриваю предложения'),
-        ('Ищу работу', 'Ищу работу'),
+        ('Не ищу работу'),
+        ('Рассматриваю предложения'),
+        ('Ищу работу'),
     )
 
     GRADE = (
@@ -107,7 +107,8 @@ class Resume(models.Model):
     specialty = models.ForeignKey(Specialty,
                                   on_delete=models.CASCADE,
                                   verbose_name='Специализация',
-                                  related_name="resumes")
+                                  related_name="resumes",
+                                  default="backend")
     name = models.CharField(max_length=200, verbose_name='Имя')
     surname = models.CharField(max_length=200, verbose_name='Фамилия')
     status = models.CharField(max_length=200, null=True, choices=STATUS, verbose_name='Статус')

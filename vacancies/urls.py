@@ -6,7 +6,7 @@ from .views import (MainView, VacanciesView, CategoryView,
                     CompanyView, VacancyView, SendApplicationView,
                     MyCompanyView, MyCompanyVacanciesView,
                     MyCompanyVacancyView, MyCompanyEditView,
-                    SearchView, MyResumeView)
+                    SearchView, MyResumeView, MyResumeCreateView)
 
 
 urlpatterns = [
@@ -23,7 +23,8 @@ urlpatterns = [
     path('mycompany/vacancies/<int:id>/', MyCompanyVacancyView.as_view(), name="mycompany-vacancy"),
 
     path('search/', SearchView.as_view(), name="search"),
-    path('myresume/', MyResumeView.as_view(), name="myresume")
+    path('myresume/', MyResumeView.as_view(), name="myresume"),
+    path('myresume/create', MyResumeCreateView.as_view(), name="myresume-create")
 ]
 
 if settings.DEBUG:
