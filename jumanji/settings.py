@@ -130,3 +130,4 @@ MEDIA_ROOT = Path(BASE_DIR, 'media')
 
 MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
+MEDIA_RESUME_FILE_DIR = 'resume_files'

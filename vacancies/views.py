@@ -45,7 +45,6 @@ class CompanyView(View):
     def get(self, request, id):
         company = Company.objects.get(id=id)
         vacancies = Vacancy.objects.filter(company=id)
-
         context = {
             'company': company,
             'vacancies': vacancies,
