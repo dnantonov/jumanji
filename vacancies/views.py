@@ -185,16 +185,16 @@ class MyResumeView(View):
         except ObjectDoesNotExist:
             return render(request, 'vacancies/resume-create.html')
 
-        def post(self, request):
-            instance = Resume.objects.get(user=request.user)
-            form = ResumeForm(request.POST or None, instance=instance)
-            if form.is_valid():
-                resume = form.save(commit=False)
-                resume.user = request.user
-                resume.save()
-                messages.success(request, 'Ваше резюме обновлено!')
-                return redirect(self.request.path_info)
-            return render(request, 'vacancies/resume-edit.html')    
+    def post(self, request):
+        instance = Resume.objects.get(user=request.user)
+        form = ResumeForm(request.POST or None, instance=instance)
+        if form.is_valid():
+            resume = form.save(commit=False)
+            resume.user = request.user
+            resume.save()
+            messages.success(request, 'Ваше резюме обновлено!')
+            return redirect(self.request.path_info)
+        return render(request, 'vacancies/resume-edit.html')    
 
 
 
