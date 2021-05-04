@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Редактировать | Джуманджи{% endblock %}
+
+{% block content %}
+<style>
+  body {background-color: #F6F2E6;}
+</style>
+
+<main class="container mt-3 pb-5">
+  <div class="row mt-5">
+    <div class="col-12 col-lg-8 offset-lg-2 m-auto">
+      <div class="card">
+        <div class="card-body px-4 pb-4">
+          <!-- Tab -->
+          <section class="tab-pane fade show active">
+            <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
+            {% if messages %}
+              {% for message in messages %}
+              <p class="alert alert-info" role="alert">
+                {{ message }}
+              </p>
+              {% endfor %}
+            {% endif %}
+
+            <form method="post" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group pb-2">
+                    <label class="mb-4 text-dark" for="id_{{ form.name.name }}">Название компании</label>
+                    <input class="form-control" name="{{ form.name.name }}" type="text" value="{{ company.name }}" id="id_{{ form.name.name }}">
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group">
+                    <label class="mb-2 text-dark" for="id_{{ form.logo.name }}">Логотип</label>
+                    <div class="row align-items-center">
+                      <div class="col-6">
+                        <img src="{{ company.logo.url }}" alt="" style="max-width: 120px;height: auto;">
+                      </div>
+                      <div class="col-6" style="position: relative;">
+                        <div class="input-group-prepend" style="position: absolute; top: 0;right: 15px;">
+                          <span class="btn btn-info px-4">Загрузить</span>
+                        </div>
+                        <div class="custom-file" style="">
+                          <input type="file"  name="{{ form.logo.name }}" class="custom-file-input" id="id_{{ form.logo.name }}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="form-group pb-2">
+                    <label class="mb-2 text-dark" for="id_{{ form.employee_count.name }}">Количество человек в компании</label>
+                    <input class="form-control" type="text" name="{{ form.employee_count.name }}" value="{{ company.employee_count }}" id="id_{{ form.employee_count.name }}">
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="form-group pb-2">
+                    <label class="mb-2 text-dark" for="id_{{ form.location.name }}">География</label>
+                    <input class="form-control" type="text" name="{{ form.location.name }}" value="{{ company.location }}" id="id_{{ form.location.name }}">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group pb-2">
+                <label class="mb-2 text-dark" for="id_{{ form.description.name }}">Информация о&nbsp;компании</label>
+                <textarea class="form-control" rows="4" name="{{ form.description.name }}"  id="id_{{ form.description.name }}" style="color:#000;">{{ company.description }}</textarea>
+              </div>
+              {{ form.errors }}
+              <div class="form-group">
+                <input type="submit" class="btn btn-info" value="Сохранить">
+              </div>
+            </form>
+
+          </section>
+          <!-- END Tab -->
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

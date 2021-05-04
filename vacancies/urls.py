@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 from .views import (MainView, VacanciesView, CategoryView,
                     CompanyView, VacancyView, SendApplicationView,
                     MyCompanyView, MyCompanyVacanciesView,
-                    MyCompanyVacancyView, MyCompanyEditView)
+                    MyCompanyVacancyView, MyCompanyEditView,
+                    SearchView, MyResumeView)
 
 
 urlpatterns = [
@@ -15,10 +16,14 @@ urlpatterns = [
     path('companies/<int:id>/', CompanyView.as_view(), name="company"),
     path('vacancies/<int:id>/', VacancyView.as_view(), name="vacancy"),
     path('vacancies/<int:id>/send/', SendApplicationView.as_view(), name="send-application"),
+    
     path('mycompany/', MyCompanyView.as_view(), name="mycompany"),
     path('mycompany/edit/', MyCompanyEditView.as_view(), name="mycompany-edit"),
     path('mycompany/vacancies/', MyCompanyVacanciesView.as_view(), name="mycompany-vacancies"),
-    path('mycompany/vacancies/<int:id>/', MyCompanyVacancyView.as_view(), name="mycompany-vacancy")
+    path('mycompany/vacancies/<int:id>/', MyCompanyVacancyView.as_view(), name="mycompany-vacancy"),
+
+    path('search/', SearchView.as_view(), name="search"),
+    path('myresume/', MyResumeView.as_view(), name="myresume")
 ]
 
 if settings.DEBUG:

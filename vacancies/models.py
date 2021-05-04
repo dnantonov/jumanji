@@ -86,7 +86,7 @@ class Application(models.Model):
 
 class Resume(models.Model):
     id = models.AutoField(primary_key=True)
-
+    
     STATUS = (
         ('Не ищу работу', 'Не ищу работу'),
         ('Рассматриваю предложения', 'Рассматриваю предложения'),
@@ -110,8 +110,10 @@ class Resume(models.Model):
                                   related_name="resumes")
     name = models.CharField(max_length=200, verbose_name='Имя')
     surname = models.CharField(max_length=200, verbose_name='Фамилия')
+    status = models.CharField(max_length=200, null=True, choices=STATUS, verbose_name='Статус')
     salary = models.IntegerField(blank=True, null=True, verbose_name='Ожидаемая зарплата')
     education = models.TextField(verbose_name='Образование', blank=True)
+    grade = models.CharField(max_length=200, null=True, choices=GRADE, verbose_name='Квалификация')
     experience = models.TextField(verbose_name='Опыт работы', blank=True)
     portfolio = models.FileField(upload_to=MEDIA_RESUME_FILE_DIR,
                                  verbose_name='Портфолио',

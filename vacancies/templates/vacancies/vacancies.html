@@ -17,13 +17,13 @@
               <div class="col-12 col-md-8 col-lg-9">
               <a style="text-decoration: none; color: #000;" href="{% url 'vacancy' vacancy.id %}">
                 <h2 class="h2 pb-2">{{ vacancy.title }}</h2>
-                <p class="mb-2">{{ vacancy.specialty }} • {{ vacancy.skills }}</p>
-                <p>От {{ vacancy.salary_from }} до {{ vacancy.salary_to }} руб.</p>
-                <p class="text-muted pt-1">{{ vacancy.published_at|date:"d F" }}</p>
               </a>
+              <p class="mb-2">{{ vacancy.specialty }} • {{ vacancy.skills }}</p>
+              <p>От {{ vacancy.salary_from }} до {{ vacancy.salary_to }} руб.</p>
+              <p class="text-muted pt-1">{{ vacancy.published_at|date:"d F" }}</p>
               </div>
               <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
-                <a href="{% url 'company' vacancy.company.id %}"><img src="{{ vacancy.company.logo.url }}" width="130" height="80" alt=""></a>
+                <a href="{% url 'company' vacancy.company.id %}"><img src="{{ vacancy.company.logo.url }}" width="130" height="80" alt="{{ vacancy.title }}"></a>
               </div>
             </div>
           </div>

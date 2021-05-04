@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
-from django.views import View
 from django.contrib import messages
+from django.views import View
+from django.views.generic import ListView
+from django.db.models import Q
 
-from django.http import (HttpResponseRedirect,
-                         HttpResponseNotFound,
+from django.http import (HttpResponseNotFound,
                          HttpResponseServerError)
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Specialty, Company, Vacancy, Application
+from .models import Specialty, Company, Vacancy, Application, Resume
 from .forms import ApplicationForm, CompanyForm, VacancyForm
 
 
@@ -68,7 +69,7 @@ class VacancyView(View):
             application.user = request.user
             application.vacancy = Vacancy.objects.get(id=id)
             application.save()
-            return HttpResponseRedirect(success_url)
+            return redirect(success_url)
 
 
 class SendApplicationView(View):
@@ -97,7 +98,7 @@ class MyCompanyView(View):
             company.owner = request.user
             company.save()
             messages.success(request, 'Информация о компании обновлена')
-            return HttpResponseRedirect(self.request.path_info)
+            return redirect(self.request.path_info)
         return render(request, 'vacancies/company-edit.html')
 
 
@@ -133,7 +134,6 @@ class MyCompanyVacancyView(View):
         try:
             vacancy = Vacancy.objects.get(id=id)
             applications = Application.objects.filter(vacancy=vacancy)
-            print(applications)
         except ObjectDoesNotExist:
             vacancy = Vacancy.objects.create(
                 id=id,
@@ -159,8 +159,23 @@ class MyCompanyVacancyView(View):
             vacancy.company = Company.objects.get(owner=request.user)
             vacancy.save()
             messages.success(request, 'Вакансия обновлена')
-            return HttpResponseRedirect(self.request.path_info)
+            return redirect(self.request.path_info)
         return render(request, 'vacancies/vacancy-edit.html')
+
+
+class MyResumeView(View):
+    def get(self, request):
+        return render(request, 'vacancies/myresume.html')
+
+
+class SearchView(ListView):
+    def get(self, request):
+        query = self.request.GET.get('q')
+        object_list = Vacancy.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+        context = {'object_list': object_list, 'query': query}
+        return render(request, 'vacancies/search.html', context)
 
 
 def custom_handler404(request, exception):
