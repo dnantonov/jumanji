@@ -21,11 +21,7 @@
       <form action="" method="post" class="" enctype="multipart/form-data">
 
         {% csrf_token %}
-				{{ formset.management_form }}
-				{% for form in formset %}
-					{{ form }}
-					<hr>
-				{% endfor %}
+				
 
 
 
@@ -33,7 +29,7 @@
 
 
 
-        <!-- <div class="row">
+        <div class="row">
           <div class="col-12 col-md-6">
             <div class="form-group pb-2">
               <label class="mb-2 text-dark" for="id_{{ form.name.name }}">Имя</label>
@@ -108,7 +104,7 @@
         </div>
         <div class="form-group">
           <input type="submit" class="btn btn-info" value="Сохранить">
-        </div> -->
+        </div>
       </form>
     </div>
   </section>
