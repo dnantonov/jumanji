@@ -178,9 +178,10 @@ class MyResumeView(View):
     # CBS для отображения страницы редактирования резюме
     def get(self, request):
         form = ResumeForm
+        specialties = Specialty.objects.all()
         try:
             resume = Resume.objects.get(user=request.user)
-            context = {'resume': resume, 'form': form}
+            context = {'resume': resume, 'form': form, 'specialties': specialties}
             return render(request, 'vacancies/resume-edit.html', context)
         except ObjectDoesNotExist:
             return render(request, 'vacancies/resume-create.html')
@@ -188,6 +189,7 @@ class MyResumeView(View):
     def post(self, request):
         instance = Resume.objects.get(user=request.user)
         form = ResumeForm(request.POST or None, instance=instance)
+        print(form)
         if form.is_valid():
             resume = form.save(commit=False)
             resume.user = request.user

@@ -116,9 +116,8 @@ class Resume(models.Model):
     education = models.TextField(verbose_name='Образование', blank=True)
     grade = models.CharField(max_length=200, null=True, choices=GRADE, verbose_name='Квалификация')
     experience = models.TextField(verbose_name='Опыт работы', blank=True)
-    portfolio = models.FileField(upload_to=MEDIA_RESUME_FILE_DIR,
-                                 verbose_name='Портфолио',
-                                 blank=True)
+    portfolio = models.URLField(verbose_name='Портфолио',
+                                blank=True)
     
     class Meta:
         verbose_name = "резюме"
