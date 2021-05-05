@@ -179,6 +179,7 @@ class MyResumeView(View):
     def get(self, request):
         form = ResumeForm
         specialties = Specialty.objects.all()
+        print(form)
         try:
             resume = Resume.objects.get(user=request.user)
             context = {'resume': resume, 'form': form, 'specialties': specialties}

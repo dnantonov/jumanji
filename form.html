@@ -1,0 +1,114 @@
+<tr>
+    <th>
+        <label for="id_specialty">Специализация:</label>
+    </th>
+    <td>
+        <ul class="errorlist">
+            <li>Обязательное поле.</li>
+        </ul>
+        <select name="specialty" id="id_specialty">
+            <option value="backend">Бэкенд</option> 
+            <option value="design">Дизайн</option>
+            <option value="devops">Девопс</option>
+            <option value="frontend">Фронтенд</option>
+            <option value="gamedev">Геймдев</option>
+            <option value="management">Менеджмент</option>
+            <option value="products">Продукты</option>
+            <option value="testing">Тестирование</option>
+        </select>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_name">Имя:</label>
+    </th>
+    <td>
+        <ul class="errorlist">
+            <li>Обязательное поле.</li>
+        </ul>
+        <input type="text" name="name" maxlength="200" required id="id_name">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_surname">Фамилия:</label>
+    </th>
+    <td>
+        <ul class="errorlist">
+            <li>Обязательное поле.</li>
+        </ul>
+        <input type="text" name="surname" maxlength="200" required id="id_surname">
+    </td>
+</tr>
+<tr>
+    <th>
+        <label for="id_status">Статус:</label>
+    </th>
+    <td>
+        <ul class="errorlist">
+            <li>Обязательное поле.</li>
+        </ul>
+        <select name="status" required id="id_status">
+            <option value="" selected>---------</option>
+            <option value="Не ищу работу">Не ищу работу</option>
+            <option value="Рассматриваю предложения">Рассматриваю предложения</option>
+            <option value="Ищу работу">Ищу работу</option>
+        </select>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_salary">Ожидаемая зарплата:</label>
+    </th>
+    <td>
+        <input type="number" name="salary" id="id_salary">
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_education">Образование:</label>
+    </th>
+    <td>
+        <textarea name="education" cols="40" rows="10" id="id_education"></textarea>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_grade">Квалификация:</label>
+    </th>
+    <td>
+        <ul class="errorlist">
+            <li>Обязательное поле.</li>
+        </ul>
+        <select name="grade" required id="id_grade">
+            <option value="" selected>---------</option>
+            <option value="Стажер">Стажер</option>
+            <option value="Джуниор">Джуниор</option>
+            <option value="Мидл">Мидл</option>
+            <option value="Синьор">Синьор</option>
+            <option value="Лид">Лид</option>
+        </select>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_experience">Опыт работы:</label>
+    </th>
+    <td>
+        <textarea name="experience" cols="40" rows="10" id="id_experience"></textarea>
+    </td>
+</tr>
+
+<tr>
+    <th>
+        <label for="id_portfolio">Портфолио:</label>
+    </th>
+    <td>
+        <input type="url" name="portfolio" maxlength="200" id="id_portfolio">
+    </td>
+</tr>
