@@ -32,9 +32,9 @@
                   <div class="col-6 col-lg-8">
                     <a href="{% url 'vacancy' vacancy.id %}" class="mb-1">{{ vacancy.title }}</a>
                     <p class="mb-1">
-                      <span class="mr-4">{{ vacancy.salary_from }}</span><a href="#" class="text-info">
+                      <span class="mr-4">{{ vacancy.salary_from }}</span>
                         {{ vacancy.applications.all|length }}
-                        откли{% with all_vacancies=vacancy.applications.all|length %}{{ all_vacancies|pluralize:"ка,ков" }}{% endwith %}</a>
+                        откли{% with all_vacancies=vacancy.applications.all|length %}{{ all_vacancies|pluralize:"ка,ков" }}{% endwith %}
                     </p>
                   </div>
                   <div class="col-6 col-lg-4 text-right">

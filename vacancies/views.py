@@ -182,7 +182,11 @@ class MyResumeView(View):
         print(form)
         try:
             resume = Resume.objects.get(user=request.user)
-            context = {'resume': resume, 'form': form, 'specialties': specialties}
+            context = {
+                'resume': resume,
+                'form': form,
+                'specialties': specialties
+            }
             return render(request, 'vacancies/resume-edit.html', context)
         except ObjectDoesNotExist:
             return render(request, 'vacancies/resume-create.html')
@@ -197,8 +201,7 @@ class MyResumeView(View):
             resume.save()
             messages.success(request, 'Ваше резюме обновлено!')
             return redirect(self.request.path_info)
-        return render(request, 'vacancies/resume-edit.html')    
-
+        return render(request, 'vacancies/resume-edit.html')
 
 
 class MyResumeCreateView(View):

@@ -16,7 +16,7 @@ urlpatterns = [
     path('companies/<int:id>/', CompanyView.as_view(), name="company"),
     path('vacancies/<int:id>/', VacancyView.as_view(), name="vacancy"),
     path('vacancies/<int:id>/send/', SendApplicationView.as_view(), name="send-application"),
-    
+
     path('mycompany/', MyCompanyView.as_view(), name="mycompany"),
     path('mycompany/edit/', MyCompanyEditView.as_view(), name="mycompany-edit"),
     path('mycompany/vacancies/', MyCompanyVacanciesView.as_view(), name="mycompany-vacancies"),
@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('search/', SearchView.as_view(), name="search"),
     path('myresume/', MyResumeView.as_view(), name="myresume"),
-    path('myresume/create', MyResumeCreateView.as_view(), name="myresume-create")
+    path('myresume/create', MyResumeCreateView.as_view(), name="myresume-create"),
 ]
 
 if settings.DEBUG:

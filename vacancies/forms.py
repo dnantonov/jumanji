@@ -32,4 +32,3 @@ class ResumeForm(ModelForm):
     class Meta:
         model = Resume
         exclude = ['user']
-
