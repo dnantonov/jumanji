@@ -4,8 +4,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.db.models import Q
 
-from django.http import (HttpResponseNotFound,
-                         HttpResponseServerError)
+from django.http import HttpResponseNotFound, HttpResponseServerError
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Specialty, Company, Vacancy, Application, Resume

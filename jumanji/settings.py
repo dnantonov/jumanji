@@ -9,13 +9,14 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = "!80org!9ekhw%3joghf49p!tkpidt5ljgy5vq)bt_f-m#r%8go"
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -77,11 +78,11 @@ WSGI_APPLICATION = 'jumanji.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '1u1sb02839y',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': int(os.environ['DATABASE_PORT'])
     }
 }
 
