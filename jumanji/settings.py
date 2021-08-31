@@ -81,11 +81,10 @@ WSGI_APPLICATION = 'jumanji.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jumanji_db',
-        'USER': 'postgres',
-        'PASSWORD': '1u1sb02839y',
-        'HOST': 'localhost',
-        'PORT': 5432
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'PORT': int(os.environ.get('DATABASE_PORT'))
     }
 }
 
@@ -132,9 +131,9 @@ USE_TZ = True
 
 # Cloudinary stuff
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'twocb',
-    'API_KEY': '792313243699994',
-    'API_SECRET': 'NKJf-65PVv7PfnrACvTJm0n5E9Y',
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
