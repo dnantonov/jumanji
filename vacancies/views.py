@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
@@ -11,8 +12,10 @@ from .models import Specialty, Company, Vacancy, Application, Resume
 from .forms import ApplicationForm, CompanyForm, VacancyForm, ResumeForm
 
 
-class MainView(View):
-    # CBV для главной
+class IndexView(View):
+    """Index page class based view"""
+    template_name = 'vacancies/index.html'
+
     def get(self, request):
         specialties = Specialty.objects.all()
         companies = Company.objects.all()
@@ -20,89 +23,111 @@ class MainView(View):
             'specialties': specialties,
             'companies': companies,
         }
-        return render(request, 'vacancies/index.html', context)
+        return render(request, self.template_name, context)
 
 
 class VacanciesView(View):
-    # CBV для страницы со всеми вакансиями
+    """All vacancies class based view"""
+    template_name = 'vacancies/vacancies.html'
+
     def get(self, request):
         vacancies = Vacancy.objects.all()
-        context = {'vacancies': vacancies}
-        return render(request, 'vacancies/vacancies.html', context)
+        paginator = Paginator(vacancies, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {'vacancies': vacancies, 'page_obj': page_obj}
+        return render(request, self.template_name, context)
 
 
 class CategoryView(View):
-    # CBS для страницы с вакансиями по категории
+    """Vacancies by category class based view"""
+    template_name = 'vacancies/vacancies.html'
+
     def get(self, request, category):
         vacancies = Vacancy.objects.filter(specialty=category)
         category = Specialty.objects.get(code=category)
-        context = {'vacancies': vacancies, 'category': category}
-        return render(request, 'vacancies/vacancies.html', context)
+        paginator = Paginator(vacancies, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {'vacancies': vacancies, 'category': category, 'page_obj': page_obj}
+        return render(request, self.template_name, context)
 
 
 class CompanyView(View):
-    # CBS для страницы компании
-    def get(self, request, id):
-        company = Company.objects.get(id=id)
-        vacancies = Vacancy.objects.filter(company=id)
+    """Company page class based view"""
+    template_name = 'vacancies/company.html'
+
+    def get(self, request, company_id):
+        company = Company.objects.get(id=company_id)
+        vacancies = Vacancy.objects.filter(company=company_id)
         context = {
             'company': company,
             'vacancies': vacancies,
         }
-        return render(request, 'vacancies/company.html', context)
+        return render(request, self.template_name, context)
 
 
 class VacancyView(View):
-    # CBS для страницы вакансии
-    def get(self, request, id):
-        form = ApplicationForm
-        vacancy = Vacancy.objects.get(id=id)
-        context = {'vacancy': vacancy, 'form': form}
-        return render(request, 'vacancies/vacancy.html', context)
+    """Vacancy page class based view"""
+    template_name = 'vacancies/vacancy.html'
+    form_class = ApplicationForm
 
-    def post(self, request, id):
-        success_url = f'/vacancies/{id}/send'
-        form = ApplicationForm(request.POST)
+    def get(self, request, vacancy_id):
+        form = self.form_class
+        vacancy = Vacancy.objects.get(id=vacancy_id)
+        context = {'vacancy': vacancy, 'form': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request, vacancy_id):
+        success_url = f'/vacancies/{vacancy_id}/send'
+        form = self.form_class(request.POST)
         if form.is_valid():
             application = form.save(commit=False)
             application.user = request.user
-            application.vacancy = Vacancy.objects.get(id=id)
+            application.vacancy = Vacancy.objects.get(id=vacancy_id)
             application.save()
             return redirect(success_url)
 
 
 class SendApplicationView(View):
-    # CBS для отправки заявки
-    def get(self, request, id):
-        context = {'id': id}
-        return render(request, 'vacancies/sent.html', context)
+    """Send application page class based view"""
+    template_name = 'vacancies/sent.html'
+
+    def get(self, request, vacancy_id):
+        context = {'id': vacancy_id}
+        return render(request, self.template_name, context)
 
 
 class MyCompanyView(View):
-    # CBS для отображения страницы редактирования компании
+    """My Company profile class based view"""
+    company_edit_template_name = 'vacancies/company-edit.html'
+    company_create_template_name = 'vacancies/company-create.html'
+    form_class = CompanyForm
+
     def get(self, request):
-        form = CompanyForm
+        form = self.form_class
         try:
             company = Company.objects.get(owner=request.user)
             context = {'company': company, 'form': form}
-            return render(request, 'vacancies/company-edit.html', context)
+            return render(request, self.company_edit_template_name, context)
         except ObjectDoesNotExist:
-            return render(request, 'vacancies/company-create.html')
+            return render(request, self.company_create_template_name)
 
     def post(self, request):
         instance = Company.objects.get(owner=request.user)
-        form = CompanyForm(request.POST or None, instance=instance)
+        form = self.form_class(request.POST or None, instance=instance)
         if form.is_valid():
             company = form.save(commit=False)
             company.owner = request.user
             company.save()
             messages.success(request, 'Информация о компании обновлена')
             return redirect(self.request.path_info)
-        return render(request, 'vacancies/company-edit.html')
+        return render(request, self.company_edit_template_name)
 
 
 class MyCompanyEditView(View):
-    # CBS для создания новой компании
+    """My Company create new profile class based view"""
+
     def get(self, request):
         Company.objects.create(
             name="Название вашей компании",
@@ -114,71 +139,80 @@ class MyCompanyEditView(View):
 
 
 class MyCompanyVacanciesView(View):
-    # CBS для отображения всех вакансий компании
+    """My Company vacancies class based view"""
+    template_name = 'vacancies/vacancy-list.html'
+
     def get(self, request):
         company = Company.objects.get(owner=request.user)
         vacancies = Vacancy.objects.filter(company=company)
         all_vac = Vacancy.objects.all().count()
         context = {'vacancies': vacancies, 'all_vac': all_vac}
-        return render(request, 'vacancies/vacancy-list.html', context)
+        return render(request, self.template_name, context)
 
 
 class MyCompanyVacancyView(View):
-    # CBS для отображения конкретной вакансии компании
-    def get(self, request, id):
-        form = VacancyForm
+    """The company edit vacancy class based view"""
+    template_name = 'vacancies/vacancy-edit.html'
+    form_class = VacancyForm
+
+    def get(self, request, vacancy_id):
+        form = self.form_class
         company = Company.objects.get(owner=request.user)
-        specialty = Specialty.objects.get(code="backend")
         specialties = Specialty.objects.all()
         try:
-            vacancy = Vacancy.objects.get(id=id)
-            applications = Application.objects.filter(vacancy=vacancy)
+            vacancy = Vacancy.objects.get(id=vacancy_id)
         except ObjectDoesNotExist:
             vacancy = Vacancy.objects.create(
-                id=id,
+                id=vacancy_id,
                 title="Название вакансии",
                 salary_from=10000,
                 salary_to=20000,
-                specialty=specialty,
+                specialty=Specialty.objects.get(code="backend"),
                 company=company,
             )
+        applications = Application.objects.filter(vacancy=vacancy)
         context = {
             'vacancy': vacancy,
             'form': form,
             'specialties': specialties,
             'applications': applications
         }
-        return render(request, 'vacancies/vacancy-edit.html', context)
+        return render(request, self.template_name, context)
 
-    def post(self, request, id):
-        instance = Vacancy.objects.get(id=id)
-        form = VacancyForm(request.POST or None, instance=instance)
+    def post(self, request, vacancy_id):
+        instance = Vacancy.objects.get(id=vacancy_id)
+        form = self.form_class(request.POST or None, instance=instance)
         if form.is_valid():
             vacancy = form.save(commit=False)
             vacancy.company = Company.objects.get(owner=request.user)
             vacancy.save()
             messages.success(request, 'Вакансия обновлена')
             return redirect(self.request.path_info)
-        return render(request, 'vacancies/vacancy-edit.html')
+        return render(request, self.template_name)
 
 
-class SearchView(ListView):
-    # CBS для выдачи поисковых запросов
+class SearchView(ListView, View):
+    """Search vacancy class based view"""
+    template_name = 'vacancies/search.html'
+
     def get(self, request):
         query = self.request.GET.get('q')
         object_list = Vacancy.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query)
         )
         context = {'object_list': object_list, 'query': query}
-        return render(request, 'vacancies/search.html', context)
+        return render(request, self.template_name, context)
 
 
 class MyResumeView(View):
-    # CBS для отображения страницы редактирования резюме
+    """My Resume class based view"""
+    resume_edit_template_name = 'vacancies/resume-edit.html'
+    resume_create_template_name = 'vacancies/resume-create.html'
+    form_class = ResumeForm
+
     def get(self, request):
-        form = ResumeForm
+        form = self.form_class
         specialties = Specialty.objects.all()
-        print(form)
         try:
             resume = Resume.objects.get(user=request.user)
             context = {
@@ -186,28 +220,29 @@ class MyResumeView(View):
                 'form': form,
                 'specialties': specialties
             }
-            return render(request, 'vacancies/resume-edit.html', context)
+            return render(request, self.resume_edit_template_name, context)
         except ObjectDoesNotExist:
-            return render(request, 'vacancies/resume-create.html')
+            return render(request, self.resume_create_template_name)
 
     def post(self, request):
         instance = Resume.objects.get(user=request.user)
-        form = ResumeForm(request.POST or None, instance=instance)
-        print(form)
+        form = self.form_class(request.POST or None, instance=instance)
         if form.is_valid():
             resume = form.save(commit=False)
             resume.user = request.user
             resume.save()
             messages.success(request, 'Ваше резюме обновлено!')
             return redirect(self.request.path_info)
-        return render(request, 'vacancies/resume-edit.html')
+        return render(request, self.resume_edit_template_name)
 
 
 class MyResumeCreateView(View):
-    # CBS для создания нового резюме
+    """My New Resume class based view"""
+
     def get(self, request):
         Resume.objects.create(
                 user=request.user,
+                specialty=Specialty.objects.get(code='backend'),
                 name="Имя",
                 surname="Фамилия"
         )

@@ -11,5 +11,5 @@ class MyLoginView(LoginView):
 
 class MyRegisterView(CreateView):
     form_class = CreateUserForm
-    success_url = '/'
+    success_url = '/accounts/login/'
     template_name = 'accounts/register.html'

@@ -30,7 +30,8 @@ class Company(models.Model):
 class Specialty(models.Model):
     code = models.CharField(primary_key=True, max_length=64)
     name = models.CharField(max_length=100)
-    picture = models.ImageField(upload_to=MEDIA_SPECIALITY_IMAGE_DIR)
+    picture = models.ImageField(upload_to=MEDIA_SPECIALITY_IMAGE_DIR, blank=True,
+                                default='media/company_images/default.gif')
 
     class Meta:
         verbose_name = "специализация"
@@ -112,8 +113,7 @@ class Resume(models.Model):
     specialty = models.ForeignKey(Specialty,
                                   on_delete=models.CASCADE,
                                   verbose_name='Специализация',
-                                  related_name="resumes",
-                                  default="backend")
+                                  related_name="resumes")
     name = models.CharField(max_length=200, verbose_name='Имя')
     surname = models.CharField(max_length=200, verbose_name='Фамилия')
     status = models.CharField(max_length=200, null=True,
