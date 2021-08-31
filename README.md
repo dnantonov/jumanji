@@ -12,7 +12,6 @@ Ccылка на сайт: https://dnjumanji.herokuapp.com/
 Страница вакансии: https://dnjumanji.herokuapp.com/vacancies/1/  
 
 Страница для создания своей компании: https://dnjumanji.herokuapp.com/mycompany/  
-Страница для редактирования своей компании: https://dnjumanji.herokuapp.com/mycompany/edit/  
 Страница вакансий своей компании: https://dnjumanji.herokuapp.com/mycompany/vacancies/  
 
 Страница для создания резюме: https://dnjumanji.herokuapp.com/myresume/create/  
