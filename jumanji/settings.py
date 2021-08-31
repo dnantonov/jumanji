@@ -22,7 +22,7 @@ SECRET_KEY = '1u1sb02839yD05menima081993'
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['dnjumanji.herokuapp.com', '0.0.0.0', 'localhost', '127.0.0.1',]
 
 # Application definition
